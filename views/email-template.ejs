@@ -1,0 +1,121 @@
+<%- include('header', { title: 'Edit Email Template'}) %>
+<div class="page-wrapper">
+    <div class="container-fluid">
+        <div class="row page-titles">
+            <div class="col-md-5 align-self-center">
+                <h4 class="text-themecolor">Edit Email Template</h4>
+            </div>
+            <div class="col-md-7 align-self-center text-end">
+                <div class="d-flex justify-content-end align-items-center">
+                    <ol class="breadcrumb justify-content-end">
+                        <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/admin/email-templates">Email Template</a></li>
+                        <li class="breadcrumb-item active"><%= data.title%></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title"><%= data.title%></h4>
+                        <h6 class="card-subtitle">Edit Email Template for <%= data.title%></h6>
+                        <form>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1" class="form-label">Email Subject</label>
+                                <div class="input-group mb-3">
+                                    <input
+                                        type="text"
+                                        id="subject"
+                                        class="form-control"
+                                        placeholder="subject"
+                                        aria-label="subject"
+                                        value="<%= data.subject%>"
+                                    />
+                                </div>
+                            </div>
+
+                            <textarea id="mymce" name="area"><%= data.format%></textarea>
+                        </form>
+                        <div class="form-actions" style="margin-top: 20px">
+                            <button type="button" id="update-template" class="btn btn-success text-white">Update Template</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('footer') %>
+
+<script>
+    $(document).ready(function () {
+        if ($('#mymce').length > 0) {
+            tinymce.init({
+                selector: 'textarea#mymce',
+                theme: 'modern',
+                height: 300,
+                plugins: [
+                    'advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker',
+                    'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+                    'save table contextmenu directionality emoticons template paste textcolor',
+                ],
+                toolbar:
+                    'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | l      ink image | print preview media fullpage | forecolor backcolor emoticons',
+            });
+        }
+    });
+    document.getElementById('update-template').addEventListener('click', function (e) {
+        e.preventDefault();
+        const location = window.location.href;
+        const urlArray = location.split('/');
+        const id = urlArray[urlArray.length - 1];
+        var url = `/admin/email-template/${id}`;
+        var subject = document.getElementById('subject').value;
+        var format = tinymce.activeEditor.getContent();
+        var data = {
+            subject: subject,
+            format: format,
+        };
+        $('.preloader').fadeIn();
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => {
+                return response.json();
+            })
+            .then((response) => {
+                $('.preloader').fadeOut();
+                if (response.status) {
+                    $.toast({
+                        heading: response.message[0],
+                        position: 'top-right',
+                        loaderBg: '#ff6849',
+                        icon: 'success',
+                        hideAfter: 3500,
+                        stack: 6,
+                    });
+                    setTimeout(() => {
+                        window.location.href = '/admin/email-templates';
+                    }, 100);
+                } else {
+                    $.toast({
+                        heading: response.message[0],
+                        position: 'top-right',
+                        loaderBg: '#ff6849',
+                        icon: 'error',
+                        hideAfter: 3500,
+                        stack: 6,
+                    });
+                }
+            })
+            .catch((error) => {
+                console.error('An error occurred:', error);
+            });
+    });
+</script>

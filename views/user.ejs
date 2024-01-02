@@ -1,0 +1,150 @@
+<%- include('header', { title: data.user?.first_name ? 'Edit User' : 'Add User' }) %>
+<div class="page-wrapper">
+    <div class="container-fluid">
+        <div class="row page-titles">
+            <div class="col-md-5 align-self-center">
+                <h4 class="text-themecolor"> <%= data.user?.first_name ? 'Edit User' : 'Add User'%></h4>
+            </div>
+            <div class="col-md-7 align-self-center text-end">
+                <div class="d-flex justify-content-end align-items-center">
+                    <ol class="breadcrumb justify-content-end">
+                        <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/admin/users">Users</a></li>
+                        <li class="breadcrumb-item active">
+                            <%= data.user?.first_name ? 'Edit User' : 'Add User'%>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <%= data.user?.first_name ? 'Edit User' : 'Add User'%>
+                        </h4>
+                        <form class="form-horizontal mt-4">
+                            <div class="form-group">
+                                <label class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="first_name" value="<%= data.user?.first_name%>">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="last_name" value="<%= data.user?.last_name%>">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" value="<%= data.user?.email%>"
+                                <% if (data.user?.email) { %>
+                                    disabled
+                                <% } %>
+                                >
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Contact Number</label>
+                                <input type="text" class="form-control" id="contact_number" value="<%= data.user?.contact_number%>">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Roles</label>
+                                <select class="form-select col-12" id="role_id">
+                                    <% data.roles.forEach(function (role) { %>
+                                        <option value="<%= role.id %>" <%= data?.user?.user_permission?.[0]?.role_id === role.id ? 'selected' : '' %>>
+                                            <%= role.role_name %>
+                                        </option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                         
+                        </form>
+                        <div class="form-actions" style="margin-top: 20px">
+                            <button type="button" id="update-subject" class="btn btn-success text-white"> 
+                                <%= data.user?.first_name ? 'Update User' : 'Add User'%>
+                              </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('footer') %>
+
+<script>
+        document.getElementById('update-subject').addEventListener('click', function (e) {
+            e.preventDefault();
+            const location = window.location.href;
+            const urlArray = location.split('/');
+            const id = urlArray[urlArray.length - 1];
+            var first_name = document.getElementById("first_name").value;
+            var last_name = document.getElementById("last_name").value;
+            var email = document.getElementById("email").value;
+            var contact_number = document.getElementById("contact_number").value;
+            var role_id = document.getElementById("role_id").value;
+
+            if((first_name).trim() == '' || (last_name).trim() == '' || (email).trim() == '' || (contact_number).trim() == ''){
+                $.toast({
+                            heading: 'Please enter all the details',
+                            position: 'top-right',
+                            loaderBg: '#ff6849',
+                            icon: 'error',
+                            hideAfter: 3500,
+                            stack: 6,
+                        });
+                return;
+            }
+
+            var url = `/user`;
+            if(!isNaN(id)){
+                url = `/user/${id}`;
+            }
+            
+           var data = {
+            first_name: first_name,
+            last_name: last_name,
+            email: email,
+            contact_number: contact_number,
+            role_id: role_id,
+           }
+
+            $('.preloader').fadeIn();
+            fetch(url, {
+                method: !isNaN(id) ? 'PUT' : 'POST',
+                headers: {
+                            'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then((response) => {
+                    return response.json();
+                })
+                .then((response) => {
+                    $('.preloader').fadeOut();
+                    if (response.status) {
+                        $.toast({
+                            heading: response.message[0],
+                            position: 'top-right',
+                            loaderBg: '#ff6849',
+                            icon: 'success',
+                            hideAfter: 3500,
+                            stack: 6,
+                        });
+                        setTimeout(() => {
+                            window.location.href = '/admin/users';
+                        }, 100);
+                    } else {
+                        $.toast({
+                            heading: response.message[0],
+                            position: 'top-right',
+                            loaderBg: '#ff6849',
+                            icon: 'error',
+                            hideAfter: 3500,
+                            stack: 6,
+                        });
+                    }
+                })
+                .catch((error) => {
+                    console.error('An error occurred:', error);
+                });
+        });
+</script>

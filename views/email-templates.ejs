@@ -1,0 +1,76 @@
+<%- include('header', { title: 'Email Templates '}) %>
+<div class="page-wrapper">
+    <div class="container-fluid">
+        <div class="row page-titles">
+            <div class="col-md-5 align-self-center">
+                <h4 class="text-themecolor">Email Templates</h4>
+            </div>
+            <div class="col-md-7 align-self-center text-end">
+                <div class="d-flex justify-content-end align-items-center">
+                    <ol class="breadcrumb justify-content-end">
+                        <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+                        <li class="breadcrumb-item active">Email Templates</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body" style="padding-left: 0; padding-right: 0px">
+                        <div class="table-responsive">
+                            <table id="myTable" class="table table-striped border">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Subject</th>
+                                        <th>Type</th>
+                                        <% if (isEditPermission) { %>
+                                        <th>Action</th>
+                                        <% } %>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% data.forEach(function (ele) { %>
+                                    <tr>
+                                        <td><%= ele.title%></td>
+                                        <td><%= ele.subject%></td>
+                                        <td><%= ele.type%></td>
+                                        <% if (isEditPermission) { %>
+                                        <td>
+                                            <div class="edit-subject" onclick="edit(event)" data-template-id="<%= ele.id %>">
+                                            <i class="icon-note"> </i>
+                                            </div>  
+                                        </td>
+                                        <% } %>
+                                    </tr>
+                                    <%});%>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('footer') %>
+<script>
+    $('#myTable').DataTable({
+        // columnDefs: [
+        //     {
+        //         targets: [3],
+        //         orderable: false,
+        //     },
+        // ],
+    });
+
+    function edit(event){
+        var id = $(event.currentTarget).data('template-id');
+        editTemplate(id);
+    }
+
+    function editTemplate(templateId) {
+        window.location.href = `/admin/email-template/${templateId}`;
+    }
+</script>

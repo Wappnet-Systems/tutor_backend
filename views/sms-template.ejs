@@ -1,0 +1,93 @@
+<%- include('header', { title: 'Edit SMS Template'}) %>
+<div class="page-wrapper">
+    <div class="container-fluid">
+        <div class="row page-titles">
+            <div class="col-md-5 align-self-center">
+                <h4 class="text-themecolor">Edit SMS Template</h4>
+            </div>
+            <div class="col-md-7 align-self-center text-end">
+                <div class="d-flex justify-content-end align-items-center">
+                    <ol class="breadcrumb justify-content-end">
+                        <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/admin/sms-templates">SMS Template</a></li>
+                        <li class="breadcrumb-item active"><%= data.title%></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title"><%= data.title%></h4>
+                        <h6 class="card-subtitle">Edit SMS Template for <%= data.title%></h6>
+                        <form>
+                            <div class="form-group">
+                                <div class="input-group mb-3">
+                                    <textarea id="myTextarea"  class="form-control" name="area"> <%= data.format%></textarea>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="form-actions" style="margin-top: 20px">
+                            <button type="button" id="update-sms-template" class="btn btn-success text-white">Update Template</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('footer') %>
+
+<script>
+    document.getElementById('update-sms-template').addEventListener('click', function (e) {
+        e.preventDefault();
+        const location = window.location.href;
+        const urlArray = location.split('/');
+        const id = urlArray[urlArray.length - 1];
+        var textarea = document.getElementById("myTextarea").value;
+        var url = `/admin/sms-template/${id}`;
+        var data = {
+            format: textarea,
+        };
+        $('.preloader').fadeIn();
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => {
+                return response.json();
+            })
+            .then((response) => {
+                $('.preloader').fadeOut();
+                if (response.status) {
+                    $.toast({
+                        heading: response.message[0],
+                        position: 'top-right',
+                        loaderBg: '#ff6849',
+                        icon: 'success',
+                        hideAfter: 3500,
+                        stack: 6,
+                    });
+                    setTimeout(() => {
+                        window.location.href = '/admin/sms-templates';
+                    }, 100);
+                } else {
+                    $.toast({
+                        heading: response.message[0],
+                        position: 'top-right',
+                        loaderBg: '#ff6849',
+                        icon: 'error',
+                        hideAfter: 3500,
+                        stack: 6,
+                    });
+                }
+            })
+            .catch((error) => {
+                console.error('An error occurred:', error);
+            });
+    });
+</script>

@@ -1,0 +1,186 @@
+<%- include('header', { title: 'Transaction Slots' }) %>
+    <div class="page-wrapper">
+        <div class="container-fluid">
+            <div class="row page-titles">
+                <div class="col-md-5 align-self-center">
+                    <h4 class="text-themecolor">Booking Slots</h4>
+                </div>
+                <div class="col-md-7 align-self-center text-end">
+                    <div class="d-flex justify-content-end align-items-center">
+                        <ol class="breadcrumb justify-content-end">
+                            <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+                            <li class="breadcrumb-item"><a href="/admin/transactions">Transaction</a></li>
+                            <li class="breadcrumb-item active">Booking Slots</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body" style="padding-left: 0; padding-right: 0px">
+                            <div class="table-responsive">
+                                <table id="config-table" class="table table-striped border">
+                                    <thead>
+                                        <tr>
+                                            <td></td>
+                                            <!-- <th>Id</th> -->
+                                            <th>Status</th>
+                                            <th>Start Time</th>
+                                            <th>End Time</th>
+                                            <th>Booking status</th>
+                                            <th>Paid</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% data.slots.forEach(function (ele) { %>
+                                            <tr>
+                                                <td>
+                                                    <% if (data.status==4 || data.status==5) { %>
+                                                        <% if (!ele.is_paid) { %>
+                                                            <input type="checkbox" class="row-checkbox"
+                                                                data-id="<%= ele.id %>">
+                                                            <% } %>
+                                                                <% } %>
+                                                </td>
+                                                <!-- <td><%= ele.id%></td> -->
+                                                <td>
+                                                    <%= ele.status==0 ? 'Pending' : ele.status==1 ? 'Success' : 'Failed'
+                                                        %>
+                                                </td>
+                                                <td>
+                                                    <%= moment(ele.from_time).format('MMMM DD, YYYY h:mm A') %>
+                                                        <!-- <%= ele.from_time.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day:
+                                            'numeric' , hour: 'numeric', minute: 'numeric' })%> -->
+                                                </td>
+                                                <td>
+                                                     <%= moment(ele.to_time).format('MMMM DD, YYYY h:mm A') %>
+
+                                                        <!-- <%= ele.to_time.toLocaleDateString('en-US', { year: 'numeric' ,
+                                                            month: 'long' , day: 'numeric' , hour: 'numeric' ,
+                                                            minute: 'numeric' })%> -->
+                                                </td>
+                                                <td>
+
+                                                    <%= data.status==0 ? 'Pending' : data.status==1 ? 'Accepted' :
+                                                        data.status==2 ? 'Rejected' : data.status==3 ? 'Payment Pending'
+                                                        : data.status==4 ? 'Ongoing' : data.status==5 ? 'Completed' :
+                                                        data.status==6 ? 'Cancelled' : data.status==7 ? 'Payment Failed'
+                                                        : data.status==8 ? 'Payment Completed' : '' %>
+                                                </td>
+                                                <td>
+                                                    <%= ele.is_paid==1 ? ele.paid_on.toLocaleDateString('en-US', {
+                                                        year: 'numeric' , month: 'long' , day: 'numeric' }) : '-' %>
+                                                </td>
+                                                <td>
+                                                    <% if (data.status==4 || data.status==5) { %>
+                                                        <% if (!ele.is_paid) { %>
+                                                            <div class="pay" onclick="pay(event)"
+                                                                data-slot-id="<%= ele.id %>">
+                                                                <button type="button"
+                                                                    class="btn waves-effect waves-light btn-xs btn-info">
+                                                                    Pay
+                                                                </button>
+                                                            </div>
+                                                            <% } %>
+                                                                <% } %>
+                                                </td>
+                                            </tr>
+                                            <%});%>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <button type="button" id="pay-selected" class="btn btn-success text-white d-none">
+                                Pay Selected
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <%- include('footer') %>
+        <script>
+            $('#config-table').DataTable({
+                responsive: true,
+                // columnDefs: [
+                //     {
+                //         targets: [4],
+                //         orderable: false,
+                //     },
+                // ],
+            });
+
+            const selectedCheckboxes = [];
+            $('.row-checkbox').on('change', function () {
+                const rowId = $(this).data('id');
+                const isChecked = $(this).prop('checked');
+
+                if (isChecked) {
+                    selectedCheckboxes.push(rowId);
+                } else {
+                    const index = selectedCheckboxes.indexOf(rowId);
+                    if (index !== -1) {
+                        selectedCheckboxes.splice(index, 1);
+                    }
+                }
+
+                if (selectedCheckboxes.length > 0) {
+                    $('#pay-selected').removeClass('d-none');
+                } else {
+                    $('#pay-selected').addClass('d-none');
+                }
+            });
+            $('#pay-selected').on('click', function () {
+                markAsPaid(selectedCheckboxes)
+            });
+
+            function pay(event) {
+                var id = $(event.currentTarget).data('slot-id');
+                markAsPaid([id]);
+            }
+
+            function markAsPaid(data) {
+                var url = '/admin/pay';
+                $('.preloader').fadeIn();
+                var data = {
+                    slots: data
+                }
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                })
+                    .then((response) => {
+                        return response.json();
+                    })
+                    .then((response) => {
+                        if (response.status) {
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 100);
+
+                        } else {
+                            $('.preloader').fadeOut();
+                            $.toast({
+                                heading: response.message[0],
+                                position: 'top-right',
+                                loaderBg: '#ff6849',
+                                icon: 'error',
+                                hideAfter: 3500,
+                                stack: 6,
+                            });
+                        }
+                    })
+                    .catch((error) => {
+                        $('.preloader').fadeOut();
+                        console.error('An error occurred:', error);
+                    });
+            }
+        </script>

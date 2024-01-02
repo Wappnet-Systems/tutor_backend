@@ -1,0 +1,153 @@
+<%- include('header', { title: "Update Profile" }) %>
+<div class="page-wrapper">
+    <div class="container-fluid">
+        <div class="row page-titles">
+            <div class="col-md-5 align-self-center">
+                <h4 class="text-themecolor"> Update Profile</h4>
+            </div>
+            <div class="col-md-7 align-self-center text-end">
+                <div class="d-flex justify-content-end align-items-center">
+                    <ol class="breadcrumb justify-content-end">
+                        <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+                        <li class="breadcrumb-item active">
+                            Update Profile
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            Update Profile
+                        </h4>
+                        <form class="form-horizontal mt-4 col-md-4">
+                            <div class="form-group">
+                                <label class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="first_name" value="<%= data.user?.first_name%>">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="last_name" value="<%= data.user?.last_name%>">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" disabled id="email" value="<%= data.user?.email%>">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Contact Number</label>
+                                <input type="text" class="form-control" id="contact_number" value="<%= data.user?.contact_number%>">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">User Profile</label>
+                                <input type="file" id="newImageInput" class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <img src="<%=data.user?.image%>" style="max-width: 200px; max-height: 200px;" id="user_image">
+                            </div>
+                            <button type="button" id="delete-image" class="btn btn-danger text-white <%=data.user?.image ? '' : 'd-none'%>"> 
+                               Remove Image
+                            </button>
+                        </form>
+                        <div class="form-actions" style="margin-top: 20px">
+                            <button type="button" id="update-user" class="btn btn-success text-white"> 
+                                <%= data.user?.first_name ? 'Update User' : 'Add User'%>
+                              </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('footer') %>
+
+<script>
+    var file;
+    var isUserImageRemoved = false;
+    document.getElementById('delete-image').addEventListener('click', function (e) {
+        document.getElementById('delete-image').classList.add('d-none');
+        document.getElementById('user_image').src = '';
+        isUserImageRemoved = true;
+        file = null;
+    });
+    document.getElementById('newImageInput').addEventListener('change', function (e) {
+            file = e.target.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('user_image').src = e.target.result;
+                    document.getElementById('delete-image').classList.remove('d-none');
+                    isUserImageRemoved = false;
+                };
+                reader.readAsDataURL(file);
+                
+            }
+        });
+        document.getElementById('update-user').addEventListener('click', function (e) {
+            e.preventDefault();
+            debugger;
+            var first_name = document.getElementById("first_name").value;
+            var last_name = document.getElementById("last_name").value;
+            var email = document.getElementById("email").value;
+            var contact_number = document.getElementById("contact_number").value;
+            var media = isUserImageRemoved ? '' : document.getElementById("user_image").src;
+            if((first_name).trim() == '' || (last_name).trim() == '' || (email).trim() == '' || (contact_number).trim() == ''){
+                $.toast({
+                            heading: 'Please enter all the details',
+                            position: 'top-right',
+                            loaderBg: '#ff6849',
+                            icon: 'error',
+                            hideAfter: 3500,
+                            stack: 6,
+                        });
+                return;
+            }
+            
+            var formData = new FormData();
+            formData.append('first_name', first_name);
+            formData.append('last_name', last_name);
+            formData.append('contact_number', contact_number);
+            formData.append('email', email);
+            formData.append('user_image', media);
+            if (file) {
+                formData.append('image', file);
+            } else{
+                
+            }
+
+            var url = `/user/admin-profile`;
+            
+
+            $('.preloader').fadeIn();
+            fetch(url, {
+                method: 'PUT',
+                body: formData,
+            })
+                .then((response) => {
+                    return response.json();
+                })
+                .then((response) => {
+                    if (response.status) {
+                       window.location.reload();
+                    } else {
+                    $('.preloader').fadeOut();
+                        $.toast({
+                            heading: response.message[0],
+                            position: 'top-right',
+                            loaderBg: '#ff6849',
+                            icon: 'error',
+                            hideAfter: 3500,
+                            stack: 6,
+                        });
+                    }
+                })
+                .catch((error) => {
+                    $('.preloader').fadeOut();
+                    console.error('An error occurred:', error);
+                });
+        });
+</script>

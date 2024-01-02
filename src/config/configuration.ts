@@ -1,0 +1,16 @@
+export default () => ({
+    port: process.env.PORT,
+    env: process.env.ENV,
+    slack_webhook_url: process.env.SLACK_WEBHOOK_URL,
+    s3_bucket: process.env.S3_BUCKET,
+    s3_acl: process.env.S3_ACL,
+    s3_url: process.env.S3_URL,
+    s3_region: process.env.S3_REGION,
+    s3_access_key_id: process.env.S3_ACCESS_KEY_ID,
+    s3_secret_access_key: process.env.S3_SECRET_ACCESS_KEY,
+    smtp_host: process.env.SMTP_HOST,
+    smtp_port: process.env.SMTP_PORT,
+    smtp_secure: process.env.SMTP_PORT == '465',
+    smtp_username: process.env.SMTP_USERNAME,
+    smtp_password: process.env.SMTP_PASSWORD,
+});

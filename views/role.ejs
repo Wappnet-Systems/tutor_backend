@@ -1,0 +1,153 @@
+<%- include('header', { title: data.role?.role_name ? 'Edit Role' : 'Add Role' }) %>
+<div class="page-wrapper">
+    <div class="container-fluid">
+        <div class="row page-titles">
+            <div class="col-md-5 align-self-center">
+                <h4 class="text-themecolor"> <%= data.role?.role_name ? 'Edit Role' : 'Add Role'%></h4>
+            </div>
+            <div class="col-md-7 align-self-center text-end">
+                <div class="d-flex justify-content-end align-items-center">
+                    <ol class="breadcrumb justify-content-end">
+                        <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/admin/roles">Roles</a></li>
+                        <li class="breadcrumb-item active">
+                            <%= data.role?.role_name ? 'Edit Role' : 'Add Role'%>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <%= data.role?.role_name ? 'Edit Role' : 'Add Role'%>
+                        </h4>
+                        <form class="form-horizontal mt-4">
+                            <div class="form-group">
+                                <label class="form-label">Role Name</label>
+                                <input type="text" class="form-control" id="role_name" value="<%= data.role?.role_name%>">
+                            </div>
+                            <% data.modules.forEach(function (ele) { %>
+                            <div class="form-group row pt-3">
+                                <div class="col-md-2">
+                                     <label class="form-label"><%= ele.module_name %></label>
+                                </div>
+                                <% ele.permissions.forEach(function (el) { %>
+                                <div class="form-check col-md-2">
+                                    <input type="checkbox" class="form-check-input" data-module-id="<%= ele.id %>" data-permission-id="<%= el.id %>" id="<%= ele.module_name %><%= el.permission_name %>" 
+                                    <% if (el?.isSelected) { %>
+                                        checked
+                                    <% } %>
+                                    >
+                                    <label class="form-check-label" for="<%= ele.module_name %><%= el.permission_name %>"><%= el.permission_name %></label>
+                                </div>
+                                <%});%>
+                            </div>
+                                <%});%>
+                        </form>
+                        <div class="form-actions" style="margin-top: 20px">
+                            <button type="button" id="update-role" class="btn btn-success text-white">  <%= data.role?.role_name ? 'Update Role' : 'Add Role'%></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('footer') %>
+
+<script>
+
+    
+        document.getElementById('update-role').addEventListener('click', function (e) {
+            e.preventDefault();
+            const location = window.location.href;
+            const urlArray = location.split('/');
+            const id = urlArray[urlArray.length - 1];
+            var role_name = document.getElementById("role_name").value;
+
+            const selectedPermissions = [];
+
+
+            document.querySelectorAll('.form-check-input').forEach(function (checkbox) {
+                const checkboxId = checkbox.id;
+                const moduleId = checkbox.getAttribute('data-module-id');
+                const permissionId = checkbox.getAttribute('data-permission-id');
+                const isChecked = checkbox.checked;
+
+                if (isChecked) {
+                    selectedPermissions.push({ checkboxId, moduleId, permissionId });
+                }
+            });
+
+
+
+            if((role_name).trim() == ''){
+                $.toast({
+                            heading: 'Please enter all the details',
+                            position: 'top-right',
+                            loaderBg: '#ff6849',
+                            icon: 'error',
+                            hideAfter: 3500,
+                            stack: 6,
+                        });
+                return;
+            }
+
+
+            if(selectedPermissions.length == 0){
+                $.toast({
+                            heading: 'Please select at-least one permission',
+                            position: 'top-right',
+                            loaderBg: '#ff6849',
+                            icon: 'error',
+                            hideAfter: 3500,
+                            stack: 6,
+                        });
+                return;
+            }
+
+            var url = `/admin/role`;
+            if(!isNaN(id)){
+                url = `/admin/role/${id}`;
+            }
+            
+           var data = {
+            role_name: role_name,
+            role_permissions: selectedPermissions,
+           }
+
+            $('.preloader').fadeIn();
+            fetch(url, {
+                method: !isNaN(id) ? 'PUT' : 'POST',
+                headers: {
+                            'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then((response) => {
+                    return response.json();
+                })
+                .then((response) => {
+                    if (response.status) {
+                        window.location.href = '/admin/roles';
+                    } else {
+                    $('.preloader').fadeOut();
+
+                        $.toast({
+                            heading: response.message[0],
+                            position: 'top-right',
+                            loaderBg: '#ff6849',
+                            icon: 'error',
+                            hideAfter: 3500,
+                            stack: 6,
+                        });
+                    }
+                })
+                .catch((error) => {
+                    console.error('An error occurred:', error);
+                });
+        });
+</script>

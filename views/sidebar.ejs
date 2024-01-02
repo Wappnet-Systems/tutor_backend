@@ -1,0 +1,211 @@
+<header class="topbar">
+    <nav class="navbar top-navbar navbar-expand-md navbar-dark">
+        <div class="navbar-header">
+            <a class="navbar-brand">
+                Tutor
+                <!-- <b>
+                    <img src="/assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
+                    <img src="/assets/images/logo-light-icon.png" alt="homepage" class="light-logo" />
+                </b>
+
+                ]<span>
+                    <img src="/assets/images/logo-text.png" alt="homepage" class="dark-logo" />
+                    <img src="/assets/images/logo-light-text.png" class="light-logo" alt="homepage"
+                /></span> -->
+            </a>
+        </div>
+        <div class="navbar-collapse">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link nav-toggler d-block d-md-none waves-effect waves-dark"
+                        href="javascript:void(0)"><i class="ti-menu"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link sidebartoggler d-none d-lg-block d-md-block waves-effect waves-dark"
+                        href="javascript:void(0)"><i class="icon-menu"></i></a>
+                </li>
+            </ul>
+            <ul class="navbar-nav my-lg-0">
+                <li class="nav-item dropdown u-pro">
+                    <a class="nav-link dropdown-toggle waves-effect waves-dark profile-pic" href=""
+                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img id="header_image" src="/assets/images/users/1.jpg" alt="user" class="d-none" />
+                        <span class="span-white d-none" id="h-span-name">AN</span>
+                        <span class="hidden-md-down" id="header_f_name"> &nbsp;<i class="fa fa-angle-down"></i></span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end animated flipInY">
+                        <a href="javascript:void(0)" id="change-password" class="dropdown-item"><i class="ti-user"></i>
+                            Change Password</a>
+                        <a href="/admin/profile" id="update-profile" class="dropdown-item"><i class="ti-user"></i>
+                            Update Profile</a>
+                        <a href="javascript:void(0)" id="logout" class="dropdown-item"><i class="fa fa-power-off"></i>
+                            Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<aside class="left-sidebar">
+    <div class="scroll-sidebar">
+        <nav class="sidebar-nav">
+            <ul id="sidebarnav">
+                <li class="user-pro">
+                    <a class="waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"
+                        style="padding-left: 12px;">
+                        <img src="/assets/images/users/1.jpg" alt="user-img" id="s_image" class="img-circle d-none" />
+                        <span class="span-name d-none" id="span-name"></span>
+                        <span class="hide-menu" id="s_name"></span>
+                    </a>
+                </li>
+
+                <li>
+                    <a class="waves-effect waves-dark" href="/admin/dashboard" aria-expanded="false"><i
+                            class="icon-speedometer"> </i><span class="hide-menu">Dashboard</span></a>
+                </li>
+
+                <li id="s-student" class="d-none">
+                    <a class="waves-effect waves-dark" href="/admin/students" aria-expanded="false"><i
+                            class="icon-people"> </i><span class="hide-menu">Students</span></a>
+                </li>
+                <li id="s-tutor" class="d-none">
+                    <a class="waves-effect waves-dark" href="/admin/tutors" aria-expanded="false"><i
+                            class="icon-people"> </i><span class="hide-menu">Tutors</span></a>
+                </li>
+                <li id="s-tutor-approvals" class="d-none">
+                    <a class="waves-effect waves-dark" href="/admin/tutor-approvals" aria-expanded="false"><i
+                            class="icon-user-following"> </i><span class="hide-menu">Tutors Approvals</span></a>
+                </li>
+                <li id="s-subjects" class="d-none">
+                    <a class="waves-effect waves-dark" href="/admin/subjects" aria-expanded="false"><i
+                            class="icon-book-open"> </i><span class="hide-menu">Subjects</span></a>
+                </li>
+                <li id="s-categories" class="d-none">
+                    <a class="waves-effect waves-dark" href="/admin/categories" aria-expanded="false"><i
+                            class="icon-graduation"> </i><span class="hide-menu">Categories</span></a>
+                </li>
+                <li id="s-transaction" class="d-none">
+                    <a class="waves-effect waves-dark" href="/admin/transactions" aria-expanded="false"><i
+                            class="icon-calculator"> </i><span class="hide-menu">Transactions</span></a>
+                </li>
+                <li id="s-email-template" class="d-none">
+                    <a class="waves-effect waves-dark" href="/admin/email-templates" aria-expanded="false"><i
+                            class="icon-speech"> </i><span class="hide-menu">Email Templates</span></a>
+                </li>
+                <li id="s-sms-template" class="d-none">
+                    <a class="waves-effect waves-dark" href="/admin/sms-templates" aria-expanded="false"><i
+                            class="icon-speech"> </i><span class="hide-menu">SMS Templates</span></a>
+                </li>
+                <li id="s-roles" class="d-none" class="d-none">
+                    <a class="waves-effect waves-dark" href="/admin/roles" aria-expanded="false"><i
+                            class="icon-user-following"> </i><span class="hide-menu">Roles</span></a>
+                </li>
+                <li id="s-users" class="d-none">
+                    <a class="waves-effect waves-dark" href="/admin/users" aria-expanded="false"><i
+                            class="icon-user-following"> </i><span class="hide-menu">Admin Users</span></a>
+                </li>
+                <li id="s-help-support" class="d-none">
+                    <a class="waves-effect waves-dark" href="/admin/feedbacks" aria-expanded="false"><i
+                            class="icon-earphones-alt"> </i><span class="hide-menu">Help & Support</span></a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</aside>
+
+<div class="preloader">
+    <div class="loader">
+        <div class="loader__figure"></div>
+        <p class="loader__label">Loading</p>
+    </div>
+</div>
+
+<script>
+    document.getElementById('logout').addEventListener('click', function () {
+        var logout = '/admin/logout';
+        fetch(logout, { method: 'GET' })
+            .then((response) => {
+                window.location.href = '/admin/';
+            })
+            .catch((error) => {
+                console.error('An error occurred:', error);
+            });
+    });
+
+    document.getElementById('change-password').addEventListener('click', function () {
+        window.location.href = '/admin/change-password';
+    });
+    var url = '/admin/user-detail/';
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+        .then((response) => {
+            return response.json();
+        })
+        .then((response) => {
+            document.getElementById('header_f_name').innerHTML = response.user.first_name;
+            document.getElementById('s_name').innerHTML = response.user.first_name + ' ' + response.user.last_name;
+            if (response.user.image) {
+                document.getElementById('header_image').src = response.user.image;
+                document.getElementById('s_image').src = response.user.image;
+                document.getElementById('s_image').classList.remove('d-none');
+                document.getElementById('header_image').classList.remove('d-none')
+            }
+            else {
+                document.getElementById('span-name').innerHTML = (response.user.first_name[0] + response.user.last_name[0]).toUpperCase();
+                document.getElementById('span-name').classList.remove('d-none');
+                document.getElementById('h-span-name').innerHTML = (response.user.first_name[0] + response.user.last_name[0]).toUpperCase();
+                document.getElementById('h-span-name').classList.remove('d-none');
+            }
+
+            response.modules.forEach((module) => {
+                let id = `s-${module.module_name.toLowerCase().replace('& ', '')}`
+                id = id.replaceAll(' ', '-');
+                const liElement = document.getElementById(id);
+                if (liElement) {
+                    if (module.permissions.some((permission) => permission.isSelected)) {
+                        liElement.classList.remove('d-none');
+                    } else {
+                        liElement.classList.add('d-none');
+                    }
+                }
+            });
+        })
+        .catch((error) => {
+            console.error('An error occurred:', error);
+        });
+</script>
+
+<style>
+    .icon-note {
+        cursor: pointer;
+    }
+
+    .icon-trash {
+        cursor: pointer;
+    }
+
+    .span-name {
+        background-color: rgb(3, 169, 243);
+        color: white;
+        padding: 10px 11px;
+        border-radius: 25px;
+    }
+
+    .span-white {
+        background-color: white;
+        color: rgb(3, 169, 243);
+        padding: 10px 11px;
+        border-radius: 25px;
+    }
+
+    .p-image {
+        height: 100px !important;
+        object-fit: cover !important;
+        width: 100px !important;
+    }
+</style>

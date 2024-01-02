@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <link href="/assets/node_modules/toast-master/css/jquery.toast.css" rel="stylesheet" />
+        <link href="/dist/css/style.min.css" rel="stylesheet" />
+        <link href="/dist/css/pages/dashboard1.css" rel="stylesheet" />
+        <title>Login</title>
+        <link href="/dist/css/pages/login-register-lock.css" rel="stylesheet">
+        <link href="/dist/css/style.min.css" rel="stylesheet">
+
+    </head>
+    <body class="skin-default card-no-border">
+        <div class="preloader">
+            <div class="loader">
+                <div class="loader__figure"></div>
+                <p class="loader__label">Loading</p>
+            </div>
+        </div>
+        <section id="wrapper">
+            <div class="login-register" style="background-image:url(/assets/images/background/login-register.jpg);">
+                <div class="login-box card">
+                    <div class="card-body">
+                        <form class="form-horizontal form-material">
+                            <h3 class="text-center m-b-20">Sign In</h3>
+                            <div class="form-group ">
+                                <div class="col-xs-12">
+                                    <input class="form-control" 
+                                    type="email"
+                                    type="text" required="" id="email" placeholder="Email"> </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <input class="form-control" 
+                                    id="password"
+                                    type="password" required="" placeholder="Password"> </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-12">
+                                    <div class="d-flex no-block align-items-center">
+                                        <div class="ms-auto">
+                                            <a href="javascript:void(0)" id="to-recover" class="text-muted"><i class="fas fa-lock m-r-5"></i> Forgot Password?</a> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group text-center">
+                                <div class="col-xs-12 p-b-20">
+                                    <button type="button" id="login" class="btn w-100 btn-lg btn-info btn-rounded text-white">Log In</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>
+
+<%- include('footer') %>
+<script>
+    document.getElementById('to-recover').addEventListener('click', function () {
+        window.location.href = '/admin/forgot-password/';
+    });
+
+    document.getElementById('login').addEventListener('click', function (e) {
+        e.preventDefault();
+        var url = '/admin/login';
+        var password = document.getElementById('password').value;
+        var email = document.getElementById('email').value;
+        var data = {
+            email: email,
+            password: password,
+        };
+        $('.preloader').fadeIn();
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => {
+                return response.json();
+            })
+            .then((response) => {
+                if (response.status) {
+                    document.getElementById('email').value = '';
+                    document.getElementById('password').value = '';
+                    window.location.href = '/admin/dashboard';
+                } else {
+                    $('.preloader').fadeOut();
+                    $.toast({
+                        heading: response.message[0],
+                        position: 'top-right',
+                        loaderBg: '#ff6849',
+                        icon: 'info',
+                        hideAfter: 3500,
+                        stack: 6,
+                    });
+                }
+            })
+            .catch((error) => {
+                $('.preloader').fadeOut();
+                console.error('An error occurred:', error);
+            });
+    });
+</script>

@@ -1,0 +1,205 @@
+<%- include('header', { title: 'Tutor Approvals'}) %>
+<div class="page-wrapper">
+    <div class="container-fluid">
+        <div class="row page-titles">
+            <div class="col-md-5 align-self-center">
+                <h4 class="text-themecolor">Tutor Approvals</h4>
+            </div>
+            <div class="col-md-7 align-self-center text-end">
+                <div class="d-flex justify-content-end align-items-center">
+                    <ol class="breadcrumb justify-content-end">
+                        <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+                        <li class="breadcrumb-item active">Tutor Approvals</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body" style="padding-left: 0; padding-right: 0px">
+                        <div class="table-responsive">
+                            <table id="myTable" class="table table-striped border">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>User Name</th>
+                                        <th>Created At</th>
+                                        <% if (isEditPermission) { %>
+                                        <th>Action</th>
+                                        <% } %>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% data.forEach(function (ele) { %>
+                                    <tr>
+                                        <td>
+                                            <% if (ele.user.image) { %>
+                                            <img src="<%= ele.user.image%>" alt="user" width="40" class="img-square">
+                                            <% } %>
+                                        </td>
+                                        <td>
+                                            <a href="/admin/tutor-approval/<%= ele.user.id%>">
+                                            <%= ele.user.first_name%> <%= ele.user.last_name%>
+                                        </a>
+                                        </td>
+                                        <td>
+                                            <%= ele.created_at?.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day:
+                                            'numeric' })%>
+                                        </td>
+                                        <% if (isEditPermission) { %>
+                                        <td>
+                                            <!-- <div class="pay" 
+                                            style="cursor: pointer;"
+                                            class="view-mdl"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#myModal"
+                                            onclick="markAsApproveOrReject(event)" data-id="<%= ele.id%>">
+                                                <span class="badge rounded-pill bg-cyan ms-auto"> 
+                                                   Mark As Approve or Reject
+                                                </span>
+                                            </div> -->
+                                            <button type="button" data-id="<%= ele.id%>" onclick="approve(event)" class="btn btn-success waves-effect text-white btn-xs" >Approve</button>
+                                            <button type="button"  data-id="<%= ele.id%>" data-bs-toggle="modal"
+                                            data-bs-target="#myModal" onclick="markAsApproveOrReject(event)" class="btn btn-danger waves-effect text-white btn-xs" >Reject</button>
+                                        </td>
+                                        <% } %>
+
+                                    </tr>
+                                    <%});%>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="myModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Mark Profile Rejected</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                <textarea class="form-control" rows="5" id="remarks" placeholder="Remarks"></textarea>
+            </div>
+            <div class="modal-footer">
+                <!-- <button type="button" onclick="updateStatus(1)" class="btn btn-success waves-effect text-white" >Approved</button> -->
+                <button type="button" onclick="updateStatus(2)" class="btn btn-danger waves-effect text-white" >Rejected</button>
+                <button type="button" class="btn btn-info waves-effect text-white" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<%- include('footer') %>
+<script>
+    var id;
+    $('#myTable').DataTable({
+        // columnDefs: [
+        //     {
+        //         targets: [3],
+        //         orderable: false,
+        //     },
+        // ],
+    });
+
+    function markAsApproveOrReject(event){
+        id = $(event.currentTarget).data('id');
+    }
+
+    function approve(event){
+        id = $(event.currentTarget).data('id');
+        var url = `/admin/approval-request/${id}`;
+            
+            var data = {
+                 status: 1,
+            }
+ 
+             $('.preloader').fadeIn();
+             fetch(url, {
+                 method: 'PUT',
+                 headers: {
+                             'Content-Type': 'application/json',
+                 },
+                 body: JSON.stringify(data),
+             })
+                 .then((response) => {
+                     return response.json();
+                 })
+                 .then((response) => {
+                     $('.preloader').fadeOut();
+                     if (response.status) {
+                             window.location.reload();
+                     } else {
+                         $.toast({
+                             heading: response.message[0],
+                             position: 'top-right',
+                             loaderBg: '#ff6849',
+                             icon: 'error',
+                             hideAfter: 3500,
+                             stack: 6,
+                         });
+                     }
+                 })
+                 .catch((error) => {
+                     console.error('An error occurred:', error);
+                 });
+    }
+
+    function updateStatus(status){
+        var remarks = document.getElementById("remarks").value;
+        if((remarks).trim() == ''){
+                $.toast({
+                            heading: 'Please enter all the details',
+                            position: 'top-right',
+                            loaderBg: '#ff6849',
+                            icon: 'error',
+                            hideAfter: 3500,
+                            stack: 6,
+                        });
+                return;
+            }
+            var url = `/admin/approval-request/${id}`;
+            
+           var data = {
+                status: status,
+                remarks: remarks
+           }
+
+            $('.preloader').fadeIn();
+            fetch(url, {
+                method: 'PUT',
+                headers: {
+                            'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then((response) => {
+                    return response.json();
+                })
+                .then((response) => {
+                    $('.preloader').fadeOut();
+                    if (response.status) {
+                            window.location.reload();
+                    } else {
+                        $.toast({
+                            heading: response.message[0],
+                            position: 'top-right',
+                            loaderBg: '#ff6849',
+                            icon: 'error',
+                            hideAfter: 3500,
+                            stack: 6,
+                        });
+                    }
+                })
+                .catch((error) => {
+                    console.error('An error occurred:', error);
+                });
+    }
+</script>

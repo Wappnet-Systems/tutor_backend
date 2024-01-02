@@ -1,0 +1,140 @@
+<%- include('header', { title: data.category_name ? 'Edit Category' : 'Add Category' }) %>
+<div class="page-wrapper">
+    <div class="container-fluid">
+        <div class="row page-titles">
+            <div class="col-md-5 align-self-center">
+                <h4 class="text-themecolor"> <%= data.category_name ? 'Edit Category' : 'Add Category'%></h4>
+            </div>
+            <div class="col-md-7 align-self-center text-end">
+                <div class="d-flex justify-content-end align-items-center">
+                    <ol class="breadcrumb justify-content-end">
+                        <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/admin/categories">Categories</a></li>
+                        <li class="breadcrumb-item active">
+                            <%= data.category_name ? 'Edit Category' : 'Add Category'%>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <%= data.category_name ? 'Edit Category' : 'Add Category'%>
+                        </h4>
+                        <form class="form-horizontal mt-4">
+                            <div class="form-group">
+                                <label class="form-label">Category Name</label>
+                                <input type="text" class="form-control" id="category_name" value="<%= data.category_name%>">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Category Description</label>
+                                <textarea class="form-control" rows="5" id="description" > <%= data.description%></textarea>
+                            </div>
+                           
+                            <div class="form-group">
+                                <label class="form-label">Category Image</label>
+                                <input type="file" id="newImageInput" class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <img src="<%= data.media %>" style="max-width: 400px; max-height: 400px;" id="category_image">
+                            </div>
+                        </form>
+                        <div class="form-actions" style="margin-top: 20px">
+                            <button type="button" id="update-category" class="btn btn-success text-white">  <%= data.category_name ? 'Update Category' : 'Add Category'%></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('footer') %>
+
+<script>
+    var file;
+     document.getElementById('newImageInput').addEventListener('change', function (e) {
+            file = e.target.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('category_image').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        document.getElementById('update-category').addEventListener('click', function (e) {
+            e.preventDefault();
+            const location = window.location.href;
+            const urlArray = location.split('/');
+            const id = urlArray[urlArray.length - 1];
+            var description = document.getElementById("description").value;
+            var category_name = document.getElementById("category_name").value;
+            var media = document.getElementById("category_image").src;
+
+            if((category_name).trim() == ''){
+                $.toast({
+                            heading: 'Please enter all the details',
+                            position: 'top-right',
+                            loaderBg: '#ff6849',
+                            icon: 'error',
+                            hideAfter: 3500,
+                            stack: 6,
+                        });
+                return;
+            }
+
+            var formData = new FormData();
+            var url = `/category`;
+            if(!isNaN(id)){
+                url = `/category/${id}`;
+            }
+            formData.append('category_name', category_name);
+            formData.append('description', description);
+            
+
+            if (file) {
+                formData.append('image', file);
+            } 
+
+            $('.preloader').fadeIn();
+            fetch(url, {
+                method: !isNaN(id) ? 'PUT' : 'POST',
+                body: formData,
+            })
+                .then((response) => {
+                    return response.json();
+                })
+                .then((response) => {
+                    $('.preloader').fadeOut();
+                    if (response.status) {
+                        $.toast({
+                            heading: response.message[0],
+                            position: 'top-right',
+                            loaderBg: '#ff6849',
+                            icon: 'success',
+                            hideAfter: 3500,
+                            stack: 6,
+                        });
+                        setTimeout(() => {
+                            window.location.href = '/admin/categories';
+                        }, 100);
+                    } else {
+                        $.toast({
+                            heading: response.message[0],
+                            position: 'top-right',
+                            loaderBg: '#ff6849',
+                            icon: 'error',
+                            hideAfter: 3500,
+                            stack: 6,
+                        });
+                    }
+                })
+                .catch((error) => {
+                    console.error('An error occurred:', error);
+                });
+        });
+</script>

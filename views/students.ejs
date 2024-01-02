@@ -1,0 +1,113 @@
+<%- include('header', { title: 'Students'}) %>
+<div class="page-wrapper">
+    <div class="container-fluid">
+        <div class="row page-titles">
+            <div class="col-md-5 align-self-center">
+                <h4 class="text-themecolor">Tutors</h4>
+            </div>
+            <div class="col-md-7 align-self-center text-end">
+                <div class="d-flex justify-content-end align-items-center">
+                    <ol class="breadcrumb justify-content-end">
+                        <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+                        <li class="breadcrumb-item active">Students</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body" style="padding-left: 0; padding-right: 0px">
+                        <div class="table-responsive">
+                            <table id="myTable" class="table table-striped border">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>First name</th>
+                                        <th>Last name</th>
+                                        <!-- <th>Enrollment</th> -->
+                                        <th>DOB</th>
+                                        <th>Contact No.</th>
+                                        <th>Email</th>
+                                        <% if (isEditPermission) { %>
+                                        <th>Action</th>
+                                        <% } %>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% data?.forEach(function (ele) { %>
+                                    <tr>
+                                        <td>
+                                            <% if (ele.image) { %>
+                                            <img src="<%=ele.image%>" alt="user" width="40" class="img-square">
+                                            <% } %>
+                                        </td>
+                                        <td>
+                                            <a href="/admin/student/<%= ele.id%>">
+                                             <%= ele.first_name%>
+                                            </a>
+                                        </td>
+                                        <td> <%= ele.last_name%></td>
+                                        <!-- <td> <%= ele.enrollment ? ele.enrollment : '-'%></td> -->
+                                        <td><%= ele.dob%></td>
+                                        <td><%= ele.contact_number%></td>
+                                        <td><%= ele.email %></td>
+                                        <% if (isEditPermission) { %>
+                                        <td>
+                                            <div class="d-flex" style="gap: 10px;">
+                                                <div class="edit-user" onclick="changeStatus(event)" data-user-id="<%= ele.id %>">
+                                                    <!-- <%= ele.status != 1 ? 'Mark As Active' : 'Mark As InActive' %> -->
+                                                    <% if (ele.status != 1) { %>
+                                                    <button type="button" class="btn waves-effect waves-light btn-xs btn-success">
+                                                       Mark As Active
+                                                    </button>
+                                                    <% } %>
+                                                    <% if (ele.status == 1) { %>
+                                                    <button type="button" class="btn waves-effect waves-light btn-xs btn-danger">
+                                                        Mark As InActive
+                                                     </button>
+                                                     <% } %>
+                                                </div>
+                                        </td>
+                                        <% } %>
+                                    </tr>
+                                    <%});%>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('footer') %>
+<script>
+    $('#myTable').DataTable({
+        // columnDefs: [
+        //     {
+        //         targets: [3],
+        //         orderable: false,
+        //     },
+        // ],
+    });
+
+    function changeStatus(event){
+        var id = $(event.currentTarget).data('user-id');
+        updateStatus(id);
+    }
+
+    function updateStatus(userId) {
+                fetch(`/user/status/${userId}`, {
+                    method: 'PUT'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.reload();
+                    } 
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+    }
+</script>

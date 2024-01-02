@@ -1,0 +1,359 @@
+<%- include('header', { title: 'Tutor Detail'}) %>
+<div class="page-wrapper">
+    <div class="container-fluid">
+       
+        <div class="row page-titles">
+            <div class="col-md-5 align-self-center">
+                <h4 class="text-themecolor">Tutor Details</h4>
+            </div>
+            <div class="col-md-7 align-self-center text-end">
+                <div class="d-flex justify-content-end align-items-center">
+                    <ol class="breadcrumb justify-content-end">
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/admin/tutors">Tutor</a></li>
+                        <li class="breadcrumb-item active">Tutor Details</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    
+        <div class="row">
+            <div class="col-lg-4 col-xlg-3 col-md-5">
+                <div class="card"> <img class="card-img" src="<%= data.tutor.image%>" height="456" alt="Card image">
+                    <div class="card-img-overlay card-inverse text-white social-profile d-flex no-block justify-content-center">
+                        <div class="align-self-center"> <img src="<%= data.tutor.image%>" class="img-circle p-image" width="100">
+                            <h4 class="card-title"><%= data.tutor.first_name%> <%= data.tutor.last_name%></h4>
+                            <p class="text-white"><%= data.tutor.tag_line%> </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body"> <small class="text-muted">Email address </small>
+                        <h6><%= data.tutor.email%></h6> <small class="text-muted p-t-30 db">Phone</small>
+                        <h6><%= data.tutor.contact_number%></h6> <small class="text-muted p-t-30 db">Address</small>
+                        <h6><%= data.tutor.address%></h6>
+                        <!-- <div class="map-box">
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d470029.1604841957!2d72.29955005258641!3d23.019996818380896!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e848aba5bd449%3A0x4fcedd11614f6516!2sAhmedabad%2C+Gujarat!5e0!3m2!1sen!2sin!4v1493204785508" width="100%" height="150" frameborder="0" style="border:0" allowfullscreen></iframe>
+                        </div>  -->
+                        <!-- <small class="text-muted p-t-30 db">Social Profile</small>
+                        <br/>
+                        <button class="btn btn-circle btn-secondary"><i class="fab fa-skype"></i></button>
+                        <button class="btn btn-circle btn-secondary"><i class="fab fa-whatsapp"></i></button>
+                        <button class="btn btn-circle btn-secondary"><i class="fas fa-link"></i></button> -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-8 col-xlg-9 col-md-7">
+                <div class="card">
+                    <ul class="nav nav-tabs profile-tab" role="tablist">
+                        <li class="nav-item"> <a class="nav-link active" data-bs-toggle="tab" href="#profile" role="tab">Profile</a> </li>
+                        <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab" href="#media" role="tab">Media</a> </li>
+                        <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab" href="#review" role="tab">Review</a> </li>
+                        <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab" href="#booking" role="tab">Bookings</a> </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="profile" role="tabpanel">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-3 col-xs-6 b-r"> <strong>Full Name</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.tutor.first_name%> <%= data.tutor.last_name%></p>
+                                    </div>
+                                   
+                                    <div class="col-md-3 col-xs-6"> <strong>Gender</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.tutor.gender == 1 ? 'Male' : 'Female'%></p>
+                                    </div>
+                                    <div class="col-md-3 col-xs-6"> <strong>DOB</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.tutor.dob ? data.tutor.dob :'-' %></p>
+                                    </div>
+                                  
+                                    <div class="col-md-3 col-xs-6"> <strong>Reviews</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.tutor.avg_rating ? data.tutor.avg_rating : '-'%> / 5</p>
+                                    </div>
+                                    <div class="col-md-3 col-xs-6"> <strong>Total Reviews</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.tutor.total_reviews ? data.tutor.total_reviews: '-'%></p>
+                                    </div>
+                                    <div class="col-md-3 col-xs-6"> <strong>Hourly Rate (1)</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.tutor.hourly_rate%></p>
+                                    </div>
+                                    <div class="col-md-3 col-xs-6"> <strong>Hourly Rate (2)</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.tutor.hourly_rate2 ? data.tutor.hourly_rate2 : '-'%></p>
+                                    </div>
+                                    <div class="col-md-3 col-xs-6"> <strong>Hourly Rate (3)</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.tutor.hourly_rate3 ? data.tutor.hourly_rate3 :  '-'%></p>
+                                    </div>
+                                  
+                                    <div class="col-md-3 col-xs-6"> <strong>Skype</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.tutor.skype ? data.tutor.skype:  '-'%></p>
+                                    </div>
+                                    <div class="col-md-3 col-xs-6"> <strong>Whatsapp</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.tutor.whatsapp ? data.tutor.whatsapp : '-'%></p>
+                                    </div>
+                                    <div class="col-md-4 col-xs-12"> <strong>Website</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.tutor.website ?  data.tutor.website : '-'%></p>
+                                    </div>
+                                    <div class="col-md-12 col-xs-6"> <strong>Teaching Mode</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.tutor.teach_at_online ? 'Online' : '' %> <%= data.tutor.teach_at_offline ? 'Offline' : ''%></p>
+                                    </div>
+                                    <div class="col-md-12 col-xs-12"> <strong>Languages</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.tutor.allLanguages ?  data.tutor.allLanguages: '-'%></p>
+                                    </div>
+                                    <div class="col-md-12 col-xs-12"> <strong>Postcodes</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.tutor.allPostCodes ? data.tutor.allPostCodes: '-'%></p>
+                                    </div>
+                                    <div class="col-md-12 col-xs-12"> <strong>Badges</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.tutor.allBadges ? data.tutor.allBadges: '-'%></p>
+                                    </div>
+
+                                </div>
+                                <hr>
+                                <p class="m-t-30">
+                                    <strong>Introduction</strong>
+                                    <p>
+                                        <%= data.tutor.introduction ?  data.tutor.introduction : '-'%>
+                                    </p>
+                                </p>
+                                <h4 class="font-medium m-t-30">Subjects</h4>
+                                <hr>
+                                <% data?.tutor_subjects?.forEach(function (ele) { %>
+                                    <div class="col-md-12 col-xs-12">
+                                        <strong>
+                                            <%= ele.category_name %>
+                                        </strong>
+                                        <br>
+                                        <p class="text-muted">
+                                        <div class="d-flex" style="flex-wrap: wrap; gap: 10px;">
+                                            <% ele?.subject?.forEach(function (subject) { %>
+                                                <div>
+                                                    <%= subject.subject_name %>
+                                                </div>
+                                                <%});%>
+                                        </div>
+                                        </p>
+                                    </div>
+                                    <%});%>
+                                <h4 class="font-medium m-t-30">Education</h4>
+                                <hr>
+                                <% data?.tutor_education?.forEach(function (ele) { %>
+                                    <div class="col-md-12 col-xs-12">
+                                        <div class="row">
+                                        <div class="col-md-12 col-xs-12"> <strong>Course Name</strong>
+                                            <br>
+                                            <p class="text-muted"><%= ele.course_name ? ele.course_name:  '-'%></p>
+                                        </div>
+
+                                        <div class="col-md-3 col-xs-6"> <strong>University</strong>
+                                            <br>
+                                            <p class="text-muted"><%= ele.university_name ? ele.university_name:  '-'%></p>
+                                        </div>
+
+                                        <div class="col-md-3 col-xs-6"> <strong>Location</strong>
+                                            <br>
+                                            <p class="text-muted"><%= ele.location ? ele.location : '-'%></p>
+                                        </div>
+                                        <div class="col-md-6 col-xs-6"> <strong>Start Date</strong>
+                                            <br>
+                                            <div class="d-flex">
+                                            <p class="text-muted"><%= new Date(ele.start_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long' }) ?? '-'%> - </p>
+                                            <% if (!ele.is_ongoing) { %>
+                                            <p class="text-muted"><%= new Date(ele.end_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long' }) ?? '-'%></p>
+                                            <% } %>
+                                            <% if (ele.is_ongoing) { %>
+                                                <p class="text-muted">Present</p>
+                                                <% } %>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 col-xs-12"> <strong>Description</strong>
+                                        <p class="text-muted">
+                                            <%= ele.description %>
+                                        </p>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <%});%>
+
+                                    
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="media" role="tabpanel">
+                            <div class="card-body">
+                                <div class="col-lg-12">
+                                    <h4 class="card-title">Media Gallery</h4>
+                                    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                                        <ol class="carousel-indicators">
+                                            <% for (let i = 0; i < data?.tutor_media.length; i++) { %>
+                                                <li data-target="#myCarousel" data-slide-to="<%= i %>" <%= i === 0 ? 'class="active"' : '' %>></li>
+                                            <% } %>
+                                        </ol>
+                                        <div class="carousel-inner" role="listbox">
+                                            <% data?.tutor_media?.forEach(function (ele, key) { %>
+                                            <div class="carousel-item <%= key === 0 ? 'active' : '' %>">
+                                                <% if (ele.media_type == 'image') { %>
+                                                <img class="img-fluid" style="" src="<%= ele.media %>" alt="Slide <%= key + 1 %>">
+                                                <% } %>
+                                                <% if (ele.media_type != 'image') { %>
+                                                <video  controls  style="">
+                                                <source src=<%= ele.media %> type="video/mp4"/>
+                                                Your browser does not support the video tag.
+                                              </video>
+                                              <% } %>
+                                            </div>
+                                            <% }); %>
+                                        </div>
+                                        <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                        <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="sr-only">Next</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="review" role="tabpanel">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="myTable" class="table table-striped border">
+                                        <thead>
+                                            <tr>
+                                                <th>Id</th>
+                                                <th>Review Date</th>
+                                                <th>User</th>
+                                                <th>Rating</th>
+                                                <th>Remarks</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% data.tutor_reviews.forEach(function (ele) { %>
+                                            <tr>
+                                                <td><%= ele.id%></td>
+                                                <td><%= new Date(ele.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })%></td>
+                                                <td><%= ele.student.first_name%> <%= ele.student.last_name%></td>
+                                                <td><%= ele.rating%></td>
+                                                <td>
+                                                
+                                                    <div  
+                                                    onclick="viewRemarks(event)"
+                                                    style="cursor: pointer;"
+                                                    class="view-mdl"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#myModal"
+                                                    data-content="<%= ele.remarks %>">
+                                                        <i
+                                                            class="icon-eye"
+                                                        >
+                                                        </i>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <%});%>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="booking" role="tabpanel">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="myTable2" class="table table-striped border">
+                                        <thead>
+                                            <tr>
+                                                <th>Id</th>
+                                                <th>Date</th>
+                                                <th>User</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% data.tutor_bookings.forEach(function (ele) { %>
+                                            <tr>
+                                                <td><%= ele.id%></td>
+                                                <td><%= new Date(ele.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })%></td>
+                                                <td><%= ele.student.first_name%> <%= ele.student.last_name%></td>
+                                                <td>
+                                                    <%= ele.status == 0 ? 'Pending' : ele.status == 1 ? 'Accepted' : ele.status == 2 ?
+                                                    'Rejected' : ele.status == 3 ? 'Payment Pending' : ele.status == 4 ? 'Ongoing' :
+                                                    ele.status == 5 ? 'Completed' : ele.status == 6 ? 'Cancelled' : ele.status == 7 ?
+                                                    'Payment Failed' : ele.status == 8 ? 'Payment Completed' : '' %>
+
+                                                </td>
+                                                <td>
+                                                    <% if ( ele.status != 2 && ele.status != 6) { %>
+                                                        <button type="button" class="btn waves-effect waves-light btn-xs btn-info" onclick="goToSlots(event)" data-booking-id="<%= ele.id %>"> 
+                                                       View Slots
+                                                        </button>
+                                                    <% } %>
+                                                </td>
+                                            </tr>
+                                            <%});%>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="myModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">User Feedback</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                <p id="user-feedback"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info waves-effect text-white" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<%- include('footer') %>
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#myCarousel').carousel();
+    });
+    $('#myTable').DataTable();
+    $('#myTable2').DataTable(); 
+    function editTransaction(booking_id) {
+        window.location.href = `/admin/booking-slots/${booking_id}`;
+    }
+
+    function goToSlots(event){
+        var booking_id = $(event.currentTarget).data('booking-id');
+        editTransaction(booking_id);
+    }
+
+    function viewRemarks(event){
+        var content = $(event.currentTarget).data('content');
+        document.getElementById('user-feedback').innerHTML = content;
+    };
+</script>

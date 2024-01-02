@@ -1,0 +1,104 @@
+<%- include('header', { title: 'Help & Support'}) %>
+<div class="page-wrapper">
+    <div class="container-fluid">
+        <div class="row page-titles">
+            <div class="col-md-5 align-self-center">
+                <h4 class="text-themecolor">Help & Support</h4>
+            </div>
+            <div class="col-md-7 align-self-center text-end">
+                <div class="d-flex justify-content-end align-items-center">
+                    <ol class="breadcrumb justify-content-end">
+                        <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+                        <li class="breadcrumb-item active">Help & Support</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body" style="padding-left: 0; padding-right: 0px">
+                        <div class="table-responsive">
+                            <table id="myTable" class="table table-striped border">
+                                <thead>
+                                    <tr>
+                                        <th>User Name</th>
+                                        <th>Email</th>
+                                        <th>Contact Number</th>
+                                        <th>Type</th>
+                                        <th>Subject</th>
+                                        <th>Created Date</th>
+                                        <th>View</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% data.forEach(function (ele) { %>
+                                    <tr>
+                                        <td><%= ele.user.first_name%> <%= ele.user.last_name%></td>
+                                        <td><%= ele.user.email%></td>
+                                        <td><%= ele.user.contact_number%></td>
+                                        <td><%= ele.user.user_type == 2 ? 'Tutor': 'Student'%></td>
+                                        <td><%= ele.feedback_subject.title == 'Other' ? ele.other_subject : ele.feedback_subject.title %></td>
+                                        <td><%= ele.created_at.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute:'numeric' }) %></td>
+                                        <td>
+                                            <div  
+                                            style="cursor: pointer;"
+                                            onclick="showModal(event)"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#myModal"
+                                            data-content="<%= ele.description %>">
+                                                <i
+                                                    class="icon-eye"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#myModal"
+                                                    data-content="<%= ele.description %>"
+                                                >
+                                                </i>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <%});%>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="myModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">User Feedback</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                <p id="user-feedback"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info waves-effect text-white" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<%- include('footer') %>
+<script>
+    $('#myTable').DataTable({
+        // columnDefs: [
+        //     {
+        //         targets: [3],
+        //         orderable: false,
+        //     },
+        // ],
+        order: [[5, 'desc']],
+    });
+
+    function showModal(event){
+        var content = $(event.currentTarget).data('content');
+        document.getElementById('user-feedback').innerHTML = content;
+    };
+</script>

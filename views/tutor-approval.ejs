@@ -1,0 +1,253 @@
+<%- include('header', { title: 'Tutor Detail'}) %>
+<div class="page-wrapper">
+    <div class="container-fluid">
+       
+        <div class="row page-titles">
+            <div class="col-md-5 align-self-center">
+                <h4 class="text-themecolor">Tutor Details</h4>
+            </div>
+            <div class="col-md-7 align-self-center text-end">
+                <div class="d-flex justify-content-end align-items-center">
+                    <ol class="breadcrumb justify-content-end">
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/admin/tutor-approvals">Tutor Approval</a></li>
+                        <li class="breadcrumb-item active">Tutor Details</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    
+        <div class="row">
+            <div class="col-lg-4 col-xlg-3 col-md-5">
+                <div class="card"> <img class="card-img" src="<%= data.tutor.image%>" height="456" alt="Card image">
+                    <div class="card-img-overlay card-inverse text-white social-profile d-flex no-block justify-content-center">
+                        <div class="align-self-center"> <img src="<%= data.tutor.image%>" class="img-circle" width="100">
+                            <h4 class="card-title"><%= data.tutor.first_name%> <%= data.tutor.last_name%></h4>
+                            <p class="text-white"><%= data.tutor.tag_line%> </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body"> <small class="text-muted">Email address </small>
+                        <h6><%= data.tutor.email%></h6> <small class="text-muted p-t-30 db">Phone</small>
+                        <h6><%= data.tutor.contact_number%></h6> <small class="text-muted p-t-30 db">Address</small>
+                        <h6><%= data.tutor.address%></h6>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-8 col-xlg-9 col-md-7">
+                <div class="card">
+                    <ul class="nav nav-tabs profile-tab" role="tablist">
+                        <li class="nav-item"> <a class="nav-link active" data-bs-toggle="tab" href="#profile" role="tab">Profile</a> </li>
+                        <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab" href="#media" role="tab">Media</a> </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="profile" role="tabpanel">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-3 col-xs-6 b-r"> <strong>Full Name</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.tutor.first_name%> <%= data.tutor.last_name%></p>
+                                    </div>
+                                   
+                                    <div class="col-md-3 col-xs-6"> <strong>Gender</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.tutor.gender == 1 ? 'Male' : 'Female'%></p>
+                                    </div>
+                                    <div class="col-md-3 col-xs-6"> <strong>DOB</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.tutor.dob %></p>
+                                    </div>
+                                  
+                                    <div class="col-md-3 col-xs-6"> <strong>Reviews</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.tutor.avg_rating%> / 5</p>
+                                    </div>
+                                    <div class="col-md-3 col-xs-6"> <strong>Total Reviews</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.tutor.total_reviews%></p>
+                                    </div>
+                                    <div class="col-md-3 col-xs-6"> <strong>Hourly Rate (1)</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.tutor.hourly_rate%></p>
+                                    </div>
+                                    <div class="col-md-3 col-xs-6"> <strong>Hourly Rate (2)</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.tutor.hourly_rate2 ?? '-'%></p>
+                                    </div>
+                                    <div class="col-md-3 col-xs-6"> <strong>Hourly Rate (3)</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.tutor.hourly_rate3 ?? '-'%></p>
+                                    </div>
+                                  
+                                    <div class="col-md-3 col-xs-6"> <strong>Skype</strong>
+                                        <br>
+                                        <p class="text-muted">
+                                            <%= data.tutor.skype ? data.tutor.skype: '-' %>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-3 col-xs-6"> <strong>Whatsapp</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.tutor.whatsapp ?  data.tutor.whatsapp :  '-'%></p>
+                                    </div>
+                                    <div class="col-md-4 col-xs-12"> <strong>Website</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.tutor.website ? data.tutor.website : '-'%></p>
+                                    </div>
+                                    <div class="col-md-12 col-xs-6"> <strong>Teaching Mode</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.tutor.teach_at_online ? 'Online' : '' %> <%= data.tutor.teach_at_offline ? 'Offline' : ''%></p>
+                                    </div>
+                                    <div class="col-md-12 col-xs-12"> <strong>Languages</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.tutor.allLanguages ? data.tutor.allLanguages:  '-'%></p>
+                                    </div>
+                                    <div class="col-md-12 col-xs-12"> <strong>Postcodes</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.tutor.allPostCodes ? data.tutor.allPostCodes: '-'%></p>
+                                    </div>
+                                    <div class="col-md-12 col-xs-12"> <strong>Badges</strong>
+                                        <br>
+                                        <p class="text-muted">
+                                            <%= data.tutor.allBadges ? data.tutor.allBadges: '-' %>
+                                        </p>
+                                    </div>
+
+                                </div>
+                                <hr>
+                                <p class="m-t-30">
+                                    <strong>Introduction</strong>
+                                    <p>
+                                        <%= data.tutor.introduction ? data.tutor.introduction : '-'%>
+                                    </p>
+                                </p>
+                                <h4 class="font-medium m-t-30">Subjects</h4>
+                                <hr>
+                                <% data?.tutor_subjects?.forEach(function (ele) { %>
+                                    <div class="col-md-12 col-xs-12">
+                                        <strong>
+                                            <%= ele.category_name %>
+                                        </strong>
+                                        <br>
+                                        <p class="text-muted">
+                                        <div class="d-flex" style="flex-wrap: wrap; gap: 10px;">
+                                            <% ele?.subject?.forEach(function (subject) { %>
+                                                <div>
+                                                    <%= subject.subject_name %>
+                                                </div>
+                                                <%});%>
+                                        </div>
+                                        </p>
+                                    </div>
+                                    <%});%>
+                                <h4 class="font-medium m-t-30">Education</h4>
+                                <hr>
+                                <% data?.tutor_education?.forEach(function (ele) { %>
+                                    <div class="col-md-12 col-xs-12">
+                                        <div class="row">
+                                        <div class="col-md-12 col-xs-12"> <strong>Course Name</strong>
+                                            <br>
+                                            <p class="text-muted"><%= ele.course_name ?? '-'%></p>
+                                        </div>
+
+                                        <div class="col-md-3 col-xs-6"> <strong>University</strong>
+                                            <br>
+                                            <p class="text-muted"><%= ele.university_name ?? '-'%></p>
+                                        </div>
+
+                                        <div class="col-md-3 col-xs-6"> <strong>Location</strong>
+                                            <br>
+                                            <p class="text-muted"><%= ele.location ?? '-'%></p>
+                                        </div>
+                                        <div class="col-md-6 col-xs-6"> <strong>Start Date</strong>
+                                            <br>
+                                            <div class="d-flex">
+                                            <p class="text-muted"><%= new Date(ele.start_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long' }) ?? '-'%> - </p>
+                                            <% if (!ele.is_ongoing) { %>
+                                            <p class="text-muted"><%= new Date(ele.end_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long' }) ?? '-'%></p>
+                                            <% } %>
+                                            <% if (ele.is_ongoing) { %>
+                                                <p class="text-muted">Present</p>
+                                                <% } %>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 col-xs-12"> <strong>Description</strong>
+                                        <p class="text-muted">
+                                            <%= ele.description %>
+                                        </p>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <%});%>
+
+                                    
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="media" role="tabpanel">
+                            <div class="card-body">
+                                <div class="col-lg-12">
+                                    <h4 class="card-title">Media Gallery</h4>
+                                    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                                        <ol class="carousel-indicators">
+                                            <% for (let i = 0; i < data?.tutor_media.length; i++) { %>
+                                                <li data-target="#myCarousel" data-slide-to="<%= i %>" <%= i === 0 ? 'class="active"' : '' %>></li>
+                                            <% } %>
+                                        </ol>
+                                        <div class="carousel-inner" role="listbox">
+                                            <% data?.tutor_media?.forEach(function (ele, key) { %>
+                                            <div class="carousel-item <%= key === 0 ? 'active' : '' %>">
+                                                <% if (ele.media_type == 'image') { %>
+                                                <img class="img-fluid" style="max-width: 100%; max-height: 400px;" src="<%= ele.media %>" alt="Slide <%= key + 1 %>">
+                                                <% } %>
+                                                <% if (ele.media_type != 'image') { %>
+                                                <video  controls  style="max-width: 100%; max-height: 400px;">
+                                                <source src=<%= ele.media %> type="video/mp4"/>
+                                                Your browser does not support the video tag.
+                                              </video>
+                                              <% } %>
+                                            </div>
+                                            <% }); %>
+                                        </div>
+                                        <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                        <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="sr-only">Next</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('footer') %>
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#myCarousel').carousel();
+    });
+    $('#myTable').DataTable();
+    $('#myTable2').DataTable(); 
+    function editTransaction(booking_id) {
+        window.location.href = `/admin/booking-slots/${booking_id}`;
+    }
+
+    function goToSlots(event){
+        var booking_id = $(event.currentTarget).data('booking-id');
+        editTransaction(booking_id);
+    }
+
+    function viewRemarks(event){
+        var content = $(event.currentTarget).data('content');
+        document.getElementById('user-feedback').innerHTML = content;
+    };
+</script>

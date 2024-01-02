@@ -1,0 +1,126 @@
+<%- include('header', { title: data.subject?.subject_name ? 'Edit Subject' : 'Add Subject' }) %>
+<div class="page-wrapper">
+    <div class="container-fluid">
+        <div class="row page-titles">
+            <div class="col-md-5 align-self-center">
+                <h4 class="text-themecolor"> <%= data.subject?.subject_name ? 'Edit Subject' : 'Add Subject'%></h4>
+            </div>
+            <div class="col-md-7 align-self-center text-end">
+                <div class="d-flex justify-content-end align-items-center">
+                    <ol class="breadcrumb justify-content-end">
+                        <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/admin/subjects">Subjects</a></li>
+                        <li class="breadcrumb-item active">
+                            <%= data.subject?.subject_name ? 'Edit Subject' : 'Add Subject'%>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <%= data.subject?.subject_name ? 'Edit Subject' : 'Add Subject'%>
+                        </h4>
+                        <form class="form-horizontal mt-4">
+                            <div class="form-group">
+                                <label class="form-label">Subject Name</label>
+                                <input type="text" class="form-control" id="subject_name" value="<%= data.subject?.subject_name%>">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Category</label>
+                                <select class="form-select col-12" id="subject_category_id">
+                                    <% data.categories.forEach(function (category) { %>
+                                        <option value="<%= category.id %>" <%= data.subject?.category_details?.id === category.id ? 'selected' : '' %>>
+                                            <%= category.category_name %>
+                                        </option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                         
+                        </form>
+                        <div class="form-actions" style="margin-top: 20px">
+                            <button type="button" id="update-subject" class="btn btn-success text-white">  <%= data.subject?.subject_name ? 'Update Subject' : 'Add Subject'%></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('footer') %>
+
+<script>
+        document.getElementById('update-subject').addEventListener('click', function (e) {
+            e.preventDefault();
+            const location = window.location.href;
+            const urlArray = location.split('/');
+            const id = urlArray[urlArray.length - 1];
+            var subject_name = document.getElementById("subject_name").value;
+            var subject_category_id = document.getElementById("subject_category_id").value;
+
+            if((subject_name).trim() == ''){
+                $.toast({
+                            heading: 'Please enter all the details',
+                            position: 'top-right',
+                            loaderBg: '#ff6849',
+                            icon: 'error',
+                            hideAfter: 3500,
+                            stack: 6,
+                        });
+                return;
+            }
+
+            var url = `/subject`;
+            if(!isNaN(id)){
+                url = `/subject/${id}`;
+            }
+            
+           var data = {
+            subject_name: subject_name,
+            subject_category_id: subject_category_id,
+           }
+
+            $('.preloader').fadeIn();
+            fetch(url, {
+                method: !isNaN(id) ? 'PUT' : 'POST',
+                headers: {
+                            'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then((response) => {
+                    return response.json();
+                })
+                .then((response) => {
+                    $('.preloader').fadeOut();
+                    if (response.status) {
+                        $.toast({
+                            heading: response.message[0],
+                            position: 'top-right',
+                            loaderBg: '#ff6849',
+                            icon: 'success',
+                            hideAfter: 3500,
+                            stack: 6,
+                        });
+                        setTimeout(() => {
+                            window.location.href = '/admin/subjects';
+                        }, 100);
+                    } else {
+                        $.toast({
+                            heading: response.message[0],
+                            position: 'top-right',
+                            loaderBg: '#ff6849',
+                            icon: 'error',
+                            hideAfter: 3500,
+                            stack: 6,
+                        });
+                    }
+                })
+                .catch((error) => {
+                    console.error('An error occurred:', error);
+                });
+        });
+</script>

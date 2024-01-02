@@ -1,0 +1,196 @@
+<%- include('header', { title: 'Student Detail'}) %>
+<div class="page-wrapper">
+    <div class="container-fluid">
+       
+        <div class="row page-titles">
+            <div class="col-md-5 align-self-center">
+                <h4 class="text-themecolor">Student Details</h4>
+            </div>
+            <div class="col-md-7 align-self-center text-end">
+                <div class="d-flex justify-content-end align-items-center">
+                    <ol class="breadcrumb justify-content-end">
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/admin/students">Students</a></li>
+                        <li class="breadcrumb-item active">Student Details</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    
+        <div class="row">
+            <div class="col-lg-4 col-xlg-3 col-md-5">
+                <div class="card" style="min-height: 456px;"> 
+                    
+                       <% if (data.student.image) { %>
+                        <img class="card-img" src="<%= data.student.image%>" height="456" alt="Card image">
+                        <% } %>
+                    <div class="card-img-overlay card-inverse text-white social-profile d-flex no-block justify-content-center">
+                        <div class="align-self-center"> 
+                            <% if (data.student.image) { %>
+                            <img src="<%= data.student.image%>" class="img-circle p-image" width="100">
+                            <% } %>
+                            <h4 class="card-title"><%= data.student.first_name%> <%= data.student.last_name%></h4>
+                            <p class="text-white"><%= data.student.tag_line%> </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body"> <small class="text-muted">Email address </small>
+                        <h6><%= data.student.email%></h6> <small class="text-muted p-t-30 db">Phone</small>
+                        <h6><%= data.student.contact_number%></h6> <small class="text-muted p-t-30 db">Address</small>
+                        <h6><%= data.student.address%></h6>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-8 col-xlg-9 col-md-7">
+                <div class="card">
+                    <ul class="nav nav-tabs profile-tab" role="tablist">
+                        <li class="nav-item"> <a class="nav-link active" data-bs-toggle="tab" href="#profile" role="tab">Profile</a> </li>
+                        <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab" href="#booking" role="tab">Bookings</a> </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="profile" role="tabpanel">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-3 col-xs-6 b-r"> <strong>Full Name</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.student.first_name%> <%= data.student.last_name%></p>
+                                    </div>
+                                   
+                                    <div class="col-md-3 col-xs-6"> <strong>Gender</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.student.gender == 1 ? 'Male' : 'Female'%></p>
+                                    </div>
+                                    <div class="col-md-3 col-xs-6"> <strong>DOB</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.student.dob ? data.student.dob: '-' %></p>
+                                    </div>
+                                    <!-- <div class="col-md-3 col-xs-6"> <strong>Enrollment</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.student.enrollment ? data.student.enrollment: '-' %></p>
+                                    </div> -->
+                                    <% if (data.student.skype != '') { %>
+                                    <div class="col-md-3 col-xs-6"> <strong>Skype</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.student.skype ?? '-'%></p>
+                                    </div>
+                                    <% } %>
+                                    <% if (data.student.whatsapp != '') { %>
+                                    <div class="col-md-3 col-xs-6"> <strong>Whatsapp</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.student.whatsapp ?? '-'%></p>
+                                    </div>
+                                    <% } %>
+                                    <% if (data.student.website != '') { %>
+                                    <div class="col-md-4 col-xs-12"> <strong>Website</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.student.website ?? '-'%></p>
+                                    </div>
+                                    <% } %>
+                                    <% if (data.student.allLanguages != '') { %>
+                                    <div class="col-md-12 col-xs-12"> <strong>Languages</strong>
+                                        <br>
+                                        <p class="text-muted"><%= data.student.allLanguages ?? '-'%></p>
+                                    </div>
+
+                                    <% } %>
+                                </div>
+                                <hr>
+                                <p class="m-t-30">
+                                    <strong>Introduction</strong>
+                                    <p>
+                                        <%= data.student.introduction ? data.student.introduction : '-'%>
+                                    </p>
+                                </p>
+                            </div>
+                        </div>
+                     
+                        <div class="tab-pane" id="booking" role="tabpanel">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="myTable2" class="table table-striped border">
+                                        <thead>
+                                            <tr>
+                                                <th>Id</th>
+                                                <th>Date</th>
+                                                <th>Tutor</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% data.student_booking.forEach(function (ele) { %>
+                                            <tr>
+                                                <td><%= ele.booking.id%></td>
+                                                <td><%= new Date(ele.booking.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })%></td>
+                                                <td><%= ele.booking.tutor?.first_name%> <%= ele.booking.tutor?.last_name%></td>
+                                                <td>
+                                                    <%= ele.booking.status == 0 ? 'Pending' : ele.booking.status == 1 ? 'Accepted' : ele.booking.status == 2 ?
+                                                    'Rejected' : ele.booking.status == 3 ? 'Payment Pending' : ele.booking.status == 4 ? 'Ongoing' :
+                                                    ele.booking.status == 5 ? 'Completed' : ele.booking.status == 6 ? 'Cancelled' : ele.booking.status == 7 ?
+                                                    'Payment Failed' : ele.booking.status == 8 ? 'Payment Completed' : '' %>
+
+                                                </td>
+                                                <td>
+                                                    <% if ( ele.booking.status != 2 && ele.booking.status != 6) { %>
+                                                        <button type="button" class="btn waves-effect waves-light btn-xs btn-info"
+                                                         onclick="goToSlots(event)" data-booking-id="<%= ele.booking.id %>"> 
+                                                       View Slots
+                                                    </button>
+                                                    <% } %>
+                                                </td>
+                                            </tr>
+                                            <%});%>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="myModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">User Feedback</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                <p id="user-feedback"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info waves-effect text-white" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<%- include('footer') %>
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#myCarousel').carousel();
+    });
+    $('#myTable').DataTable();
+    $('#myTable2').DataTable(); 
+    function editTransaction(booking_id) {
+        window.location.href = `/admin/booking-slots-student/${booking_id}`;
+    }
+
+    function goToSlots(event){
+        var booking_id = $(event.currentTarget).data('booking-id');
+        editTransaction(booking_id);
+    }
+
+    function viewRemarks(event){
+        var content = $(event.currentTarget).data('content');
+        document.getElementById('user-feedback').innerHTML = content;
+    };
+</script>
